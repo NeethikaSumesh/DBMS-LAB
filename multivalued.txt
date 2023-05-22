@@ -1,0 +1,66 @@
+conversion of multivalued attribute into tables
+
+mysql> create table students(roll int primary key,name varchar(20),address varchar(20),class varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll    | int         | NO   | PRI | NULL    |       |
+| name    | varchar(10) | YES  |     | NULL    |       |
+| address | varchar(15) | YES  |     | NULL    |       |
+| class   | varchar(15) | YES  |     | NULL    |       |
+| sid     | int         | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> create table stud_ph(roll int,foreign key 
+    -> (roll) references students(roll),phone int,primary key(roll,phone));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc stud_ph;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| roll  | int  | NO   | PRI | NULL    |       |
+| phone | int  | NO   | PRI | NULL    |       |
++-------+------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> insert into students(roll,name,address,class) values (1,'swapna','pune','cs'),(2,'anuja','pune','te');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select  * from students;
++------+--------+---------+-------+
+| roll | name   | address | class |
++------+--------+---------+-------+
+|    1 | swapna | pune    | cs    |
+|    2 | anuja  | pune    | te    |
++------+--------+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into stud_ph(roll,phone) values(1,89652);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into stud_ph(roll,phone) values(1,71000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into stud_ph(roll,phone) values(2,66000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into stud_ph(roll,phone) values(2,96400);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from stud_ph;
++------+-------+
+| roll | phone |
++------+-------+
+|    1 | 71000 |
+|    1 | 89652 |
+|    2 | 66000 |
+|    2 | 96400 |
++------+-------+
+4 rows in set (0.00 sec)
+
