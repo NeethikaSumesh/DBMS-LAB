@@ -1,0 +1,265 @@
+****************aggregate functions with group by and having clause****************
+
+----> find avg sal in each dept
+----> find avg sal in each dept where avg sal of all instructors is more than 40000
+----> find num of instructors with dept name in each dept
+
+mysql> use university;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from instructor;
++------+------+--------+-----------+
+| id   | name | salary | dept_name |
++------+------+--------+-----------+
+|  111 | ABC  |  65000 | COMPUTER  |
+|  112 | PQR  |  90000 | MUSIC     |
+|  113 | EFG  |  70000 | PHYSICS   |
+|  114 | XYZ  |  50000 | HISTORY   |
+|  115 | LMN  |  90000 | MUSIC     |
+|  116 | UVW  |  70000 | PHYSICS   |
+|  117 | STU  |  55000 | BIOLOGY   |
++------+------+--------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> insert into instructor (id,name,salary,dept_name) values (118,'SSB',40000,'COMPUTER');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into instructor (id,name,salary,dept_name) values (119,'SSD',50000,'COMPUTER');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into instructor (id,name,salary,dept_name) values (120,'SAD',50000,'COMPUTER');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into instructor (id,name,salary,dept_name) values (121,'DAS',50000,'PHYSICS');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into instructor (id,name,salary,dept_name) values (122,'DAS',40000,'BIOLOGY');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from instructor;
++------+------+--------+-----------+
+| id   | name | salary | dept_name |
++------+------+--------+-----------+
+|  111 | ABC  |  65000 | COMPUTER  |
+|  112 | PQR  |  90000 | MUSIC     |
+|  113 | EFG  |  70000 | PHYSICS   |
+|  114 | XYZ  |  50000 | HISTORY   |
+|  115 | LMN  |  90000 | MUSIC     |
+|  116 | UVW  |  70000 | PHYSICS   |
+|  117 | STU  |  55000 | BIOLOGY   |
+|  118 | SSB  |  40000 | COMPUTER  |
+|  119 | SSD  |  50000 | COMPUTER  |
+|  120 | SAD  |  50000 | COMPUTER  |
+|  121 | DAS  |  50000 | PHYSICS   |
+|  122 | DAS  |  40000 | BIOLOGY   |
++------+------+--------+-----------+
+12 rows in set (0.00 sec)
+
+mysql> select avg(salary),dept_name from instructor group by dept_name;
++-------------+-----------+
+| avg(salary) | dept_name |
++-------------+-----------+
+|  51250.0000 | COMPUTER  |
+|  90000.0000 | MUSIC     |
+|  63333.3333 | PHYSICS   |
+|  50000.0000 | HISTORY   |
+|  47500.0000 | BIOLOGY   |
++-------------+-----------+
+5 rows in set (0.02 sec)
+
+mysql> select avg(salary),dept_name from instructor group by dept_name having avg(sal)>40000;
+ERROR 1054 (42S22): Unknown column 'sal' in 'having clause'
+mysql> select avg(salary),dept_name from instructor group by dept_name having avg(salary)>40000;
++-------------+-----------+
+| avg(salary) | dept_name |
++-------------+-----------+
+|  51250.0000 | COMPUTER  |
+|  90000.0000 | MUSIC     |
+|  63333.3333 | PHYSICS   |
+|  50000.0000 | HISTORY   |
+|  47500.0000 | BIOLOGY   |
++-------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select count(id),dept_name from instructor group by dept_name;
++-----------+-----------+
+| count(id) | dept_name |
++-----------+-----------+
+|         4 | COMPUTER  |
+|         2 | MUSIC     |
+|         3 | PHYSICS   |
+|         1 | HISTORY   |
+|         2 | BIOLOGY   |
++-----------+-----------+
+5 rows in set (0.01 sec)
+
+*****************LIKE OPERATOR************************************************************
+-----> find name of all dept which include substring i
+-----> find name of all dept where dept name must end with y
+-----> find name of all instructors whose names have exactly 3 characters
+-----> find name of instructors who are working in the dept which has sec character 'o'
+
+mysql> select dept_name from instructor where dept_name like '%i%';
++-----------+
+| dept_name |
++-----------+
+| MUSIC     |
+| PHYSICS   |
+| HISTORY   |
+| MUSIC     |
+| PHYSICS   |
+| BIOLOGY   |
+| PHYSICS   |
+| BIOLOGY   |
++-----------+
+8 rows in set (0.00 sec)
+
+mysql> select dept_name from instructor where dept_name like '%y';
++-----------+
+| dept_name |
++-----------+
+| HISTORY   |
+| BIOLOGY   |
+| BIOLOGY   |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> select distinct dept_name from instructor where dept_name like '%y';
++-----------+
+| dept_name |
++-----------+
+| HISTORY   |
+| BIOLOGY   |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct name from instructor where dept_name like '___';
+Empty set (0.00 sec)
+
+mysql> select name from instructor where name like '___';
++------+
+| name |
++------+
+| ABC  |
+| PQR  |
+| EFG  |
+| XYZ  |
+| LMN  |
+| UVW  |
+| STU  |
+| SSB  |
+| SSD  |
+| SAD  |
+| DAS  |
+| DAS  |
++------+
+12 rows in set (0.00 sec)
+
+mysql> select name,dept_name from instructor where dept_name like '_o%';
++------+-----------+
+| name | dept_name |
++------+-----------+
+| ABC  | COMPUTER  |
+| SSB  | COMPUTER  |
+| SSD  | COMPUTER  |
+| SAD  | COMPUTER  |
++------+-----------+
+4 rows in set (0.00 sec)
+
+***************ORDER BY CLAUSE*************
+
+mysql> select name,dept_name,salary from instructor order by salary desc;
++------+-----------+--------+
+| name | dept_name | salary |
++------+-----------+--------+
+| PQR  | MUSIC     |  90000 |
+| LMN  | MUSIC     |  90000 |
+| EFG  | PHYSICS   |  70000 |
+| UVW  | PHYSICS   |  70000 |
+| ABC  | COMPUTER  |  65000 |
+| STU  | BIOLOGY   |  55000 |
+| XYZ  | HISTORY   |  50000 |
+| SSD  | COMPUTER  |  50000 |
+| SAD  | COMPUTER  |  50000 |
+| DAS  | PHYSICS   |  50000 |
+| SSB  | COMPUTER  |  40000 |
+| DAS  | BIOLOGY   |  40000 |
++------+-----------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select name,dept_name,salary from instructor order by salary asc;
++------+-----------+--------+
+| name | dept_name | salary |
++------+-----------+--------+
+| SSB  | COMPUTER  |  40000 |
+| DAS  | BIOLOGY   |  40000 |
+| XYZ  | HISTORY   |  50000 |
+| SSD  | COMPUTER  |  50000 |
+| SAD  | COMPUTER  |  50000 |
+| DAS  | PHYSICS   |  50000 |
+| STU  | BIOLOGY   |  55000 |
+| ABC  | COMPUTER  |  65000 |
+| EFG  | PHYSICS   |  70000 |
+| UVW  | PHYSICS   |  70000 |
+| PQR  | MUSIC     |  90000 |
+| LMN  | MUSIC     |  90000 |
++------+-----------+--------+
+12 rows in set (0.00 sec)
+
+ANOTHER EG:
+
+mysql> create table orders(ordno int primary key,itemname varchar(10),qty int(10),unit_price int);
+Query OK, 0 rows affected, 1 warning (0.05 sec)
+
+mysql> insert into orders(ordno,itemname,qty,unit_price) values (1,'soap',10,50),(2,'powder',5,80),(3,'lotion',2,75),(4,'perfume',4,175),(5,'deo',8,250);
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from orders;
++-------+----------+------+------------+
+| ordno | itemname | qty  | unit_price |
++-------+----------+------+------------+
+|     1 | soap     |   10 |         50 |
+|     2 | powder   |    5 |         80 |
+|     3 | lotion   |    2 |         75 |
+|     4 | perfume  |    4 |        175 |
+|     5 | deo      |    8 |        250 |
++-------+----------+------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select ordno,itemname,qty*unit_price as total 
+    -> from orders
+    -> order by total;
++-------+----------+-------+
+| ordno | itemname | total |
++-------+----------+-------+
+|     3 | lotion   |   150 |
+|     2 | powder   |   400 |
+|     1 | soap     |   500 |
+|     4 | perfume  |   700 |
+|     5 | deo      |  2000 |
++-------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select ordno,itemname,qty*unit_price as total from orders order by total desc;
++-------+----------+-------+
+| ordno | itemname | total |
++-------+----------+-------+
+|     5 | deo      |  2000 |
+|     4 | perfume  |   700 |
+|     1 | soap     |   500 |
+|     2 | powder   |   400 |
+|     3 | lotion   |   150 |
++-------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> 
+
+
+
+
+
+
+
