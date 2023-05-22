@@ -1,0 +1,80 @@
+// TO GENERATE A PROCEDURAL PROGRAM TO CALCULATE ELECTRICICTY BILL USING CURSOR
+
+CREATE DATABASE ELECT_BILL;
+
+USE ELECT_BILL;
+
+mysql> CREATE TABLE Customer(id INT(10),name VARCHAR(25),address VARCHAR(40),last_read INT(10),current_read INT(10),month INT(4),year INT(5),unit_charge INT(5));
+
+mysql> INSERT INTO Customer (id,name,address,last_read) VALUES (112,'Neethika','Kannur',200),(113,'Nishaga','Delhi',100),(114,'Dhanya','Thalassery',150),(115,'Sumesh','Coimbatore',300);
+
+mysql> SELECT * FROM Customer;
++------+----------+------------+-----------+--------------+-------+------+-------------+
+| id   | name     | address    | last_read | current_read | month | year | unit_charge |
++------+----------+------------+-----------+--------------+-------+------+-------------+
+|  112 | Neethika | Kannur     |       200 |         NULL |  NULL | NULL |        NULL |
+|  113 | Nishaga  | Delhi      |       100 |         NULL |  NULL | NULL |        NULL |
+|  114 | Dhanya   | Thalassery |       150 |         NULL |  NULL | NULL |        NULL |
+|  115 | Sumesh   | Coimbatore |       300 |         NULL |  NULL | NULL |        NULL |
++------+----------+------------+-----------+--------------+-------+------+-------------+
+
+
+DELIMITER #
+DROP PROCEDURE IF EXISTS bill;
+CREATE PROCEDURE bill(cid INT,current_read INT)
+BEGIN
+DECLARE DONE INT DEFAULT 0;
+DECLARE cname VARCHAR(40);
+DECLARE lastdate DATE;
+DECLARE l_read INT;
+DECLARE cur_read INT;
+DECLARE cunit INT;
+DECLARE cmonth INT;
+DECLARE charge INT;
+DECLARE CUR CURSOR FOR SELECT id,name,last_read FROM Customer WHERE id=cid;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE=1;
+OPEN CUR;
+READLOOP:LOOP
+FETCH CUR INTO cid,cname,l_read;
+IF DONE=1 THEN 
+LEAVE READLOOP;
+END IF;
+SET cunit=current_read-l_read;
+SET charge=cunit*2;
+SET lastdate=date_add(curdate(),interval 10 day);
+SELECT cid,cname,lastdate,cunit,charge;
+UPDATE Customer SET last_read=current_read WHERE id=cid;
+UPDATE Customer SET current_read=l_read+current_read WHERE id=cid;
+UPDATE Customer SET month=month(lastdate) WHERE id=cid;
+UPDATE Customer SET year=year(lastdate) WHERE id=cid;
+END LOOP;
+CLOSE CUR;
+END #
+
+DELIMITER ;
+CALL bill(112,450);
++------+----------+------------+-------+--------+
+| cid  | cname    | lastdate   | cunit | charge |
++------+----------+------------+-------+--------+
+|  112 | Neethika | 2022-08-10 |   250 |    500 |
++------+----------+------------+-------+--------+
+
+CALL bill(113,250);
++------+---------+------------+-------+--------+
+| cid  | cname   | lastdate   | cunit | charge |
++------+---------+------------+-------+--------+
+|  113 | Nishaga | 2022-08-10 |   150 |    300 |
++------+---------+------------+-------+--------+
+
+
+SELECT * FROM Customer;
++------+----------+------------+-----------+--------------+-------+------+-------------+
+| id   | name     | address    | last_read | current_read | month | year | unit_charge |
++------+----------+------------+-----------+--------------+-------+------+-------------+
+|  112 | Neethika | Kannur     |       450 |          650 |     8 | 2022 |        NULL |
+|  113 | Nishaga  | Delhi      |       250 |          350 |     8 | 2022 |        NULL |
+|  114 | Dhanya   | Thalassery |       150 |         NULL |  NULL | NULL |        NULL |
+|  115 | Sumesh   | Coimbatore |       300 |         NULL |  NULL | NULL |        NULL |
++------+----------+------------+-----------+--------------+-------+------+-------------+
+
+
