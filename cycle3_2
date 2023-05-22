@@ -1,0 +1,96 @@
+//CREATE A PROCEDURE TO FIND GRADE OF A STUDENT USING CURSOR
+
+CREATE DATABASE MARKS;
+USE MARKS;
+
+CREATE TABLE MarkSheet(RollNo INT(5),name VARCHAR(20),sub1 INT(4),sub2 INT(4),sub3 INT(4),sub4 INT(4),sub5 INT(4),sub6 INT(4));
+
+INSERT INTO MarkSheet VALUES(10,"Nishaga",100,96,92,88,91,85),(20,"Lianvi",74,82,70,69,86,73),(30,"Niya",55,61,58,63,45,32),(40,"Savya",64,55,49,29,26,15);
+
+SELECT * FROM MarkSheet;
++--------+---------+------+------+------+------+------+------+
+| RollNo | name    | sub1 | sub2 | sub3 | sub4 | sub5 | sub6 |
++--------+---------+------+------+------+------+------+------+
+|     10 | Nishaga |  100 |   96 |   92 |   88 |   91 |   85 |
+|     20 | Lianvi  |   74 |   82 |   70 |   69 |   86 |   73 |
+|     30 | Niya    |   55 |   61 |   58 |   63 |   45 |   32 |
+|     40 | Savya   |   64 |   55 |   49 |   29 |   26 |   15 |
++--------+---------+------+------+------+------+------+------+
+
+
+DELIMITER #
+DROP PROCEDURE IF EXISTS GradeFinder;
+CREATE PROCEDURE GradeFinder(cname VARCHAR(40))
+BEGIN
+DECLARE DONE INT DEFAULT 0;
+DECLARE total INT;
+DECLARE cgrade VARCHAR(20);
+DECLARE csub1 INT;
+DECLARE csub2 INT;
+DECLARE csub3 INT;
+DECLARE csub4 INT;
+DECLARE csub5 INT;
+DECLARE csub6 INT;
+DECLARE CUR CURSOR FOR SELECT sub1,sub2,sub3,sub4,sub5,sub6 FROM MarkSheet WHERE name=cname;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET DONE=1;
+OPEN CUR;
+READLOOP:LOOP
+FETCH CUR INTO csub1,csub2,csub3,csub4,csub5,csub6;
+IF DONE=1 THEN
+LEAVE READLOOP;
+END IF;
+SET total=csub1+csub2+csub3+csub4+csub5+csub6;
+IF(total>480) THEN
+SET cgrade="A";
+END IF;
+IF(total BETWEEN 400 AND 480) THEN
+SET cgrade="B+";
+END IF;
+IF(total BETWEEN 360 AND 400) THEN
+SET cgrade="B";
+END IF;
+IF(total BETWEEN 300 AND 360) THEN
+SET cgrade="C";
+END IF;
+IF(total<300) THEN
+SET cgrade="F";
+END IF;
+SELECT csub1,csub2,csub3,csub4,csub5,csub6,cname,cgrade;
+UPDATE MarkSheet SET grade=cgrade WHERE name=cname;
+END LOOP;
+CLOSE CUR;
+END #
+
+DELIMITER ;
+CALL GradeFinder("Nishaga");
++-------+-------+-------+-------+-------+-------+---------+--------+
+| csub1 | csub2 | csub3 | csub4 | csub5 | csub6 | cname   | cgrade |
++-------+-------+-------+-------+-------+-------+---------+--------+
+|   100 |    96 |    92 |    88 |    91 |    85 | Nishaga | A      |
++-------+-------+-------+-------+-------+-------+---------+--------+
+
+CALL GradeFinder("Lianvi");
++-------+-------+-------+-------+-------+-------+--------+--------+
+| csub1 | csub2 | csub3 | csub4 | csub5 | csub6 | cname  | cgrade |
++-------+-------+-------+-------+-------+-------+--------+--------+
+|    74 |    82 |    70 |    69 |    86 |    73 | Lianvi | B+     |
++-------+-------+-------+-------+-------+-------+--------+--------+
+
+CALL GradeFinder("Savya");
++-------+-------+-------+-------+-------+-------+-------+--------+
+| csub1 | csub2 | csub3 | csub4 | csub5 | csub6 | cname | cgrade |
++-------+-------+-------+-------+-------+-------+-------+--------+
+|    64 |    55 |    49 |    29 |    26 |    15 | Savya | F      |
++-------+-------+-------+-------+-------+-------+-------+--------+
+
+CALL GradeFinder("Niya");
++-------+-------+-------+-------+-------+-------+-------+--------+
+| csub1 | csub2 | csub3 | csub4 | csub5 | csub6 | cname | cgrade |
++-------+-------+-------+-------+-------+-------+-------+--------+
+|    55 |    61 |    58 |    63 |    45 |    32 | Niya  | C      |
++-------+-------+-------+-------+-------+-------+-------+--------+
+
+
+
+
+
