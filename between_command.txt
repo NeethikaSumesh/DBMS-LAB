@@ -1,0 +1,72 @@
+************between*********
+------> find details of instructor whose DOJ is inbetween 1-1-2000 and 31-12-2005
+------> find records of instructors whose sal in between 50000 and 70000 and id not in 111,112,113
+------> find the records of instructors whose sal in betwwen 50000 and 70000 order by salary
+------> find the names of instructors whose dept name is in between computer and musicin
+
+mysql> select * from instructor;
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 111 | abc  |  65000 | computer  | 1999-02-02 |
+| 112 | sam  |  90000 | Music     | 2001-02-13 |
+| 113 | efg  |  70000 | physics   | 2004-02-03 |
+| 114 | xyz  |  50000 | History   | 2004-05-03 |
+| 115 | das  |  90000 | Music     | 2005-05-05 |
+| 116 | uvw  |  70000 | physics   | 2006-11-11 |
+| 117 | cad  |  55000 | biology   | 2006-11-11 |
++-----+------+--------+-----------+------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from instructor where join_date between '1-1-2000' and '31-12-2005';
+Empty set, 14 warnings (0.00 sec)
+
+mysql> select * from instructor where join_date between '2000-01-01' and '2005-12-31';
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 112 | sam  |  90000 | Music     | 2001-02-13 |
+| 113 | efg  |  70000 | physics   | 2004-02-03 |
+| 114 | xyz  |  50000 | History   | 2004-05-03 |
+| 115 | das  |  90000 | Music     | 2005-05-05 |
++-----+------+--------+-----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from instructor where salary between (50000 and 70000) and id not in 111,112,113;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '111,112,113' at line 1
+mysql> select * from instructor where salary between 50000 and 70000 and id not in (111,112,113);
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 114 | xyz  |  50000 | History   | 2004-05-03 |
+| 116 | uvw  |  70000 | physics   | 2006-11-11 |
+| 117 | cad  |  55000 | biology   | 2006-11-11 |
++-----+------+--------+-----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from instructor where salary between 50000 and 70000 order by salary;
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 114 | xyz  |  50000 | History   | 2004-05-03 |
+| 117 | cad  |  55000 | biology   | 2006-11-11 |
+| 111 | abc  |  65000 | computer  | 1999-02-02 |
+| 113 | efg  |  70000 | physics   | 2004-02-03 |
+| 116 | uvw  |  70000 | physics   | 2006-11-11 |
++-----+------+--------+-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from instructor where dept_name between 'computer' and 'music'; 
++-----+------+--------+-----------+------------+
+| id  | name | salary | dept_name | join_date  |
++-----+------+--------+-----------+------------+
+| 111 | abc  |  65000 | computer  | 1999-02-02 |
+| 112 | sam  |  90000 | Music     | 2001-02-13 |
+| 114 | xyz  |  50000 | History   | 2004-05-03 |
+| 115 | das  |  90000 | Music     | 2005-05-05 |
++-----+------+--------+-----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> 
+
+
