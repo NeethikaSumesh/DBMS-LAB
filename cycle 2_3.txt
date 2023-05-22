@@ -1,3 +1,8 @@
+//CREATE A PROCEDURE FOR DISPLAYING A FIBONACCI SEQUENCE
+
+CREATE DATABASE Fibo;
+USE Fibo;
+
 DELIMITER #
 CREATE PROCEDURE fibonacci(num INT)
 BEGIN
@@ -25,6 +30,20 @@ SELECT * FROM fib;
 DROP TABLE fib;
 END #
 
-
 DELIMITER ;
-CALL fiboncci(20);
+CALL fibonacci(10);
++------+
+| n    |
++------+
+|    0 |
+|    1 |
+|    1 |
+|    2 |
+|    3 |
+|    5 |
+|    8 |
+|   13 |
+|   21 |
+|   34 |
++------+
+
