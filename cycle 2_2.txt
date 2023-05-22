@@ -1,0 +1,78 @@
+mysql> USE BANKS;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT * FROM Account;
++-----------+----------+--------------+-------+---------+---------+-----------+
+| AccNo     | AccName  | Address      | PanNo | AccType | Balance | Phone     |
++-----------+----------+--------------+-------+---------+---------+-----------+
+|    898964 | Neeraj   | Pooram House | 14563 | Current |  350000 | 859065778 |
+|  12345678 | Neethika | NEW VILLA    | 78945 | SB      |    1000 | 950023578 |
+|  22003645 | Anjana   | Kuzhil House | 10023 | SB      |    4500 | 956020225 |
+|  22345678 | Neha     | OLD VILLA    | 11945 | Current |  150000 | 990023578 |
+|  40011012 | Parvathy | Vrindavan    | 99631 | Current |  500000 | 759065449 |
+|  89600123 | Khajol   | Mahil House  | 11111 | SB      |     500 | 789456123 |
+| 144112201 | Nidhin   | Sree Krishna | 11223 | SB      |    2500 | 884897458 |
++-----------+----------+--------------+-------+---------+---------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Transaction;
++---------+-----------+------------+--------+-----------+
+| TransID | AccNo     | TransDate  | Amount | TransType |
++---------+-----------+------------+--------+-----------+
+|   45561 |  22345678 | 2003-05-12 |   1500 | Credit    |
+|   85561 |    898964 | 2003-05-21 |  55500 | Debit     |
+|   45501 | 144112201 | 2021-03-05 |   8500 | Credit    |
+|   66210 |  12345678 | 2021-03-11 |   1900 | Credit    |
+|   77810 |  22003645 | 2022-07-25 |  47890 | Debit     |
+|   99360 |  40011012 | 2022-07-14 |  11750 | Credit    |
+|   55002 |  89600123 | 2022-06-04 |  25000 | Debit     |
+|      57 |  40011012 | 2022-05-16 |  50000 | Credit    |
+|   85562 |    898964 | 2003-05-22 |  12500 | Credit    |
+|   45562 |  22345678 | 2003-12-25 |   5000 | Debit     |
++---------+-----------+------------+--------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Account WHERE Balance=(SELECT MAX(Balance) FROM Account);
++----------+----------+-----------+-------+---------+---------+-----------+
+| AccNo    | AccName  | Address   | PanNo | AccType | Balance | Phone     |
++----------+----------+-----------+-------+---------+---------+-----------+
+| 40011012 | Parvathy | Vrindavan | 99631 | Current |  500000 | 759065449 |
++----------+----------+-----------+-------+---------+---------+-----------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO Transaction VALUES(57,40011012,'2022-05-16',1500,'Credit');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> SELECT AccName FROM Account,Transaction WHERE(WEEK(TransDate)=WEEKOFYEAR(TransDate) AND Transaction.AccNo=Account.AccNo) GROUP BY AccName,TransDate  HAVING COUNT(TransType)>=2;
++----------+
+| AccName  |
++----------+
+| Parvathy |
++----------+
+1 row in set (0.01 sec)
+
+mysql> SELECT AccName,Balance FROM Account,Transaction WHERE Account.AccNo IN(SELECT AccNo FROM Transaction WHERE MONTH(TransDate)=MONTH(CURDATE()) AND Amount>2500 AND TransType='DEBIT') GROUP BY AccName,Balance;
++---------+---------+
+| AccName | Balance |
++---------+---------+
+| Neeraj  |  350000 |
++---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AccName FROM Account WHERE AccNo NOT IN(SELECT AccNo FROM Transaction WHERE YEAR(TransDate)=YEAR(CURDATE()) AND MONTH(TransDate)=MONTH(CURDATE()));
++----------+
+| AccName  |
++----------+
+| Neeraj   |
+| Neethika |
+| Anjana   |
+| Neha     |
+| Khajol   |
+| Nidhin   |
++----------+
+6 rows in set (0.01 sec)
+
+
+ 

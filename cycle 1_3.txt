@@ -1,0 +1,118 @@
+mysql> CREATE DATABASE DISTRICTS;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE DISTRICTS;
+Database changed
+
+mysql> CREATE TABLE Kerala(slNO INT(2) PRIMARY KEY,Name VARCHAR(25),Literacy DEC(4,2),Population INT(10),Area DEC(7,2));
+Query OK, 0 rows affected (0.55 sec)
+
+mysql> DESC Kerala;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| slNO       | int(2)       | NO   | PRI | NULL    |       |
+| Name       | varchar(25)  | YES  |     | NULL    |       |
+| Literacy   | decimal(4,2) | YES  |     | NULL    |       |
+| Population | int(10)      | YES  |     | NULL    |       |
+| Area       | decimal(7,2) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> CREATE TABLE TamilNadu(slNO INT(2) ,FOREIGN KEY(slNO) REFERENCES Kerala(slNO),Name VARCHAR(25) PRIMARY KEY,Literacy DEC(4,2),Population INT(10),Area DEC(7,2));
+Query OK, 0 rows affected (0.32 sec)
+
+mysql> DESC TamilNadu;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| slNO       | int(2)       | YES  | MUL | NULL    |       |
+| Name       | varchar(25)  | NO   | PRI | NULL    |       |
+| Literacy   | decimal(4,2) | YES  |     | NULL    |       |
+| Population | int(10)      | YES  |     | NULL    |       |
+| Area       | decimal(7,2) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO Kerala VALUES(1,'Kasargod',95.25,14142,4563.21),(2,'Kannur',96.14,25656,78963),(3,'Wayanad',97.01,330023,452.01),(4,'Kozhikode',98.41,457012,5501.23),(5,'Malappuram',99.25,77001,5565),(6,'Ernakulam',94.25,88963,256.12);
+Query OK, 6 rows affected (0.13 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO TamilNadu VALUES(1,'Cuddalore',95.25,244142,5563.21),(2,'Chennai',96.14,99656,7963),(3,'Coimbature',87.01,530023,752.01),(4,'Thirunelveli',88.41,457012,5501.23),(5,'Thoothukudi',99.25,74001,2565.12),(6,'Salem',94.25,18963,456.12);
+Query OK, 6 rows affected (0.05 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Kerala;
++------+------------+----------+------------+----------+
+| slNO | Name       | Literacy | Population | Area     |
++------+------------+----------+------------+----------+
+|    1 | Kasargod   |    95.25 |      14142 |  4563.21 |
+|    2 | Kannur     |    96.14 |      25656 | 78963.00 |
+|    3 | Wayanad    |    97.01 |     330023 |   452.01 |
+|    4 | Kozhikode  |    98.41 |     457012 |  5501.23 |
+|    5 | Malappuram |    99.25 |      77001 |  5565.00 |
+|    6 | Ernakulam  |    94.25 |      88963 |   256.12 |
++------+------------+----------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT *FROM TamilNadu;
++------+--------------+----------+------------+---------+
+| slNO | Name         | Literacy | Population | Area    |
++------+--------------+----------+------------+---------+
+|    2 | Chennai      |    96.14 |      99656 | 7963.00 |
+|    3 | Coimbature   |    87.01 |     530023 |  752.01 |
+|    1 | Cuddalore    |    95.25 |     244142 | 5563.21 |
+|    6 | Salem        |    94.25 |      18963 |  456.12 |
+|    4 | Thirunelveli |    88.41 |     457012 | 5501.23 |
+|    5 | Thoothukudi  |    99.25 |      74001 | 2565.12 |
++------+--------------+----------+------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT *  FROM Kerala,TamilNadu WHERE Kerala.Literacy=TamilNadu.Literacy;
++------+------------+----------+------------+----------+------+-------------+----------+------------+---------+
+| slNO | Name       | Literacy | Population | Area     | slNO | Name        | Literacy | Population | Area    |
++------+------------+----------+------------+----------+------+-------------+----------+------------+---------+
+|    2 | Kannur     |    96.14 |      25656 | 78963.00 |    2 | Chennai     |    96.14 |      99656 | 7963.00 |
+|    1 | Kasargod   |    95.25 |      14142 |  4563.21 |    1 | Cuddalore   |    95.25 |     244142 | 5563.21 |
+|    6 | Ernakulam  |    94.25 |      88963 |   256.12 |    6 | Salem       |    94.25 |      18963 |  456.12 |
+|    5 | Malappuram |    99.25 |      77001 |  5565.00 |    5 | Thoothukudi |    99.25 |      74001 | 2565.12 |
++------+------------+----------+------------+----------+------+-------------+----------+------------+---------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT Name FROM Kerala UNION SELECT Name FROM TamilNadu;
++--------------+
+| Name         |
++--------------+
+| Kasargod     |
+| Kannur       |
+| Wayanad      |
+| Kozhikode    |
+| Malappuram   |
+| Ernakulam    |
+| Cuddalore    |
+| Chennai      |
+| Coimbature   |
+| Thirunelveli |
+| Thoothukudi  |
+| Salem        |
++--------------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT Literacy AS Kerala_Minus_TamilNadu FROM Kerala WHERE Literacy NOT IN(SELECT Literacy FROM TamilNadu);
++------------------------+
+| Kerala_Minus_TamilNadu |
++------------------------+
+|                  97.01 |
+|                  98.41 |
++------------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Literacy AS TamilNadu_Minus_Kerala FROM TamilNadu WHERE Literacy NOT IN(SELECT Literacy FROM Kerala);
++------------------------+
+| TamilNadu_Minus_Kerala |
++------------------------+
+|                  87.01 |
+|                  88.41 |
++------------------------+
+2 rows in set (0.00 sec)
+

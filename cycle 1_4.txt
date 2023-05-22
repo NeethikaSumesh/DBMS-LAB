@@ -1,0 +1,140 @@
+mysql> DESC Department;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| DNO   | int(10)     | NO   | PRI | NULL    |       |
+| DNAME | varchar(20) | NO   |     | NULL    |       |
+| D_HOD | varchar(25) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+mysql> DESC Employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| ENO     | int(10)     | NO   | PRI | NULL    |       |
+| ENAME   | varchar(20) | NO   |     | NULL    |       |
+| SALARY  | int(15)     | NO   |     | NULL    |       |
+| DNO     | int(10)     | YES  | MUL | NULL    |       |
+| MNGRNO  | int(10)     | YES  |     | NULL    |       |
+| DOJ     | date        | YES  |     | NULL    |       |
+| JOB     | varchar(25) | YES  |     | NULL    |       |
+| ADDRESS | varchar(30) | YES  |     | NULL    |       |
+| CITY    | varchar(25) | YES  |     | NULL    |       |
+| PINCODE | int(6)      | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+mysql> SELECT * FROM Department;
++-----+------------+--------+
+| DNO | DNAME      | D_HOD  |
++-----+------------+--------+
+|  10 | SALES      | SUMESH |
+|  20 | ACCOUNTING | HARI   |
+|  30 | MARKETTING | RAMESH |
+|  40 | PRODUCTION | RAJEEV |
++-----+------------+--------+
+mysql> SELECT * FROM Employee;
++-----+---------+--------+------+--------+------------+----------------+-------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB            | ADDRESS     | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+----------------+-------------+---------+---------+
+| 121 | JUNE    |   7000 |   20 |    151 | 2000-05-06 | WORKER         | SIVA SAI    | CHENNAI |  670101 |
+| 131 | RAHAN   |  12000 |   30 |    151 | 1997-04-21 | SUPERVISOR     | VRINDHAVAN  | MUMBAI  |  563631 |
+| 141 | DIVYA   |   4500 |   40 |    161 | 1945-03-14 | POEN           | AISWARYAM   | KOCHI   |  670265 |
+| 151 | AMMU    |  30000 |   10 |    200 | 2007-08-15 | MANAGER        | BLUE ICE    | CHENNAI |  670156 |
+| 161 | SAYU    |  30152 |   10 |    200 | 2001-02-12 | MANAGER        | BHAVANS     | KOCHI   |  670201 |
+| 171 | SAMMU   |   2130 |   20 |    161 | 1992-07-20 | CLERK          | SAHIRA      | MUMBAI  |  560121 |
+| 181 | MEGHA   |  15000 |   30 |    151 | 2016-05-30 | WORKER         | SWEET VILLA | CHENNAI |  634567 |
+| 191 | PREETHI |  14005 |   10 |    151 | 1963-04-06 | CLERK          | GREEN HOUSE | KOCHI   |  658621 |
+| 200 | SHYJA   |  50000 |   30 |   NULL | 2020-02-01 | SENIOR MANAGER | KRISHNA     | MUMBAI  |  652021 |
++-----+---------+--------+------+--------+------------+----------------+-------------+---------+---------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE Department SET D_HOD='SAYU' WHERE DNO=10;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Department SET D_HOD='RAHAN' WHERE DNO=30;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Department;
++-----+------------+--------+
+| DNO | DNAME      | D_HOD  |
++-----+------------+--------+
+|  10 | SALES      | SAYU   |
+|  20 | ACCOUNTING | HARI   |
+|  30 | MARKETTING | RAHAN  |
+|  40 | PRODUCTION | RAJEEV |
++-----+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT ENAME AS NAME,JOB AS DESIGNATION,DNAME AS DEPARTMENT FROM Employee,Department WHERE ENAME=D_HOD;
++-------+-------------+------------+
+| NAME  | DESIGNATION | DEPARTMENT |
++-------+-------------+------------+
+| RAHAN | SUPERVISOR  | MARKETTING |
+| SAYU  | MANAGER     | SALES      |
++-------+-------------+------------+
+mysql> INSERT INTO Department VALUES(50,'TRANSPORT','NANDINI');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM Department;
++-----+------------+---------+
+| DNO | DNAME      | D_HOD   |
++-----+------------+---------+
+|  10 | SALES      | SAYU    |
+|  20 | ACCOUNTING | HARI    |
+|  30 | MARKETTING | RAHAN   |
+|  40 | PRODUCTION | RAJEEV  |
+|  50 | TRANSPORT  | NANDINI |
++-----+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee LEFT OUTER JOIN Department ON Employee.DNO=Department.DNO;
++-----+---------+--------+------+--------+------------+----------------+-------------+---------+---------+------+------------+--------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB            | ADDRESS     | CITY    | PINCODE | DNO  | DNAME      | D_HOD  |
++-----+---------+--------+------+--------+------------+----------------+-------------+---------+---------+------+------------+--------+
+| 151 | AMMU    |  30000 |   10 |    200 | 2007-08-15 | MANAGER        | BLUE ICE    | CHENNAI |  670156 |   10 | SALES      | SAYU   |
+| 161 | SAYU    |  30152 |   10 |    200 | 2001-02-12 | MANAGER        | BHAVANS     | KOCHI   |  670201 |   10 | SALES      | SAYU   |
+| 191 | PREETHI |  14005 |   10 |    151 | 1963-04-06 | CLERK          | GREEN HOUSE | KOCHI   |  658621 |   10 | SALES      | SAYU   |
+| 121 | JUNE    |   7000 |   20 |    151 | 2000-05-06 | WORKER         | SIVA SAI    | CHENNAI |  670101 |   20 | ACCOUNTING | HARI   |
+| 171 | SAMMU   |   2130 |   20 |    161 | 1992-07-20 | CLERK          | SAHIRA      | MUMBAI  |  560121 |   20 | ACCOUNTING | HARI   |
+| 131 | RAHAN   |  12000 |   30 |    151 | 1997-04-21 | SUPERVISOR     | VRINDHAVAN  | MUMBAI  |  563631 |   30 | MARKETTING | RAHAN  |
+| 181 | MEGHA   |  15000 |   30 |    151 | 2016-05-30 | WORKER         | SWEET VILLA | CHENNAI |  634567 |   30 | MARKETTING | RAHAN  |
+| 200 | SHYJA   |  50000 |   30 |   NULL | 2020-02-01 | SENIOR MANAGER | KRISHNA     | MUMBAI  |  652021 |   30 | MARKETTING | RAHAN  |
+| 141 | DIVYA   |   4500 |   40 |    161 | 1945-03-14 | POEN           | AISWARYAM   | KOCHI   |  670265 |   40 | PRODUCTION | RAJEEV |
++-----+---------+--------+------+--------+------------+----------------+-------------+---------+---------+------+------------+--------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT * FROM Employee RIGHT OUTER JOIN Department ON Employee.DNO=Department.DNO;
++------+---------+--------+------+--------+------------+----------------+-------------+---------+---------+-----+------------+---------+
+| ENO  | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB            | ADDRESS     | CITY    | PINCODE | DNO | DNAME      | D_HOD   |
++------+---------+--------+------+--------+------------+----------------+-------------+---------+---------+-----+------------+---------+
+|  151 | AMMU    |  30000 |   10 |    200 | 2007-08-15 | MANAGER        | BLUE ICE    | CHENNAI |  670156 |  10 | SALES      | SAYU    |
+|  161 | SAYU    |  30152 |   10 |    200 | 2001-02-12 | MANAGER        | BHAVANS     | KOCHI   |  670201 |  10 | SALES      | SAYU    |
+|  191 | PREETHI |  14005 |   10 |    151 | 1963-04-06 | CLERK          | GREEN HOUSE | KOCHI   |  658621 |  10 | SALES      | SAYU    |
+|  121 | JUNE    |   7000 |   20 |    151 | 2000-05-06 | WORKER         | SIVA SAI    | CHENNAI |  670101 |  20 | ACCOUNTING | HARI    |
+|  171 | SAMMU   |   2130 |   20 |    161 | 1992-07-20 | CLERK          | SAHIRA      | MUMBAI  |  560121 |  20 | ACCOUNTING | HARI    |
+|  131 | RAHAN   |  12000 |   30 |    151 | 1997-04-21 | SUPERVISOR     | VRINDHAVAN  | MUMBAI  |  563631 |  30 | MARKETTING | RAHAN   |
+|  181 | MEGHA   |  15000 |   30 |    151 | 2016-05-30 | WORKER         | SWEET VILLA | CHENNAI |  634567 |  30 | MARKETTING | RAHAN   |
+|  200 | SHYJA   |  50000 |   30 |   NULL | 2020-02-01 | SENIOR MANAGER | KRISHNA     | MUMBAI  |  652021 |  30 | MARKETTING | RAHAN   |
+|  141 | DIVYA   |   4500 |   40 |    161 | 1945-03-14 | POEN           | AISWARYAM   | KOCHI   |  670265 |  40 | PRODUCTION | RAJEEV  |
+| NULL | NULL    |   NULL | NULL |   NULL | NULL       | NULL           | NULL        | NULL    |    NULL |  50 | TRANSPORT  | NANDINI |
++------+---------+--------+------+--------+------------+----------------+-------------+---------+---------+-----+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee LEFT OUTER JOIN Department ON Employee.DNO=Department.DNO UNION SELECT * FROM Employee RIGHT OUTER JOIN Department ON Employee.DNO=Department.DNO;
++------+---------+--------+------+--------+------------+----------------+-------------+---------+---------+------+------------+---------+
+| ENO  | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB            | ADDRESS     | CITY    | PINCODE | DNO  | DNAME      | D_HOD   |
++------+---------+--------+------+--------+------------+----------------+-------------+---------+---------+------+------------+---------+
+|  151 | AMMU    |  30000 |   10 |    200 | 2007-08-15 | MANAGER        | BLUE ICE    | CHENNAI |  670156 |   10 | SALES      | SAYU    |
+|  161 | SAYU    |  30152 |   10 |    200 | 2001-02-12 | MANAGER        | BHAVANS     | KOCHI   |  670201 |   10 | SALES      | SAYU    |
+|  191 | PREETHI |  14005 |   10 |    151 | 1963-04-06 | CLERK          | GREEN HOUSE | KOCHI   |  658621 |   10 | SALES      | SAYU    |
+|  121 | JUNE    |   7000 |   20 |    151 | 2000-05-06 | WORKER         | SIVA SAI    | CHENNAI |  670101 |   20 | ACCOUNTING | HARI    |
+|  171 | SAMMU   |   2130 |   20 |    161 | 1992-07-20 | CLERK          | SAHIRA      | MUMBAI  |  560121 |   20 | ACCOUNTING | HARI    |
+|  131 | RAHAN   |  12000 |   30 |    151 | 1997-04-21 | SUPERVISOR     | VRINDHAVAN  | MUMBAI  |  563631 |   30 | MARKETTING | RAHAN   |
+|  181 | MEGHA   |  15000 |   30 |    151 | 2016-05-30 | WORKER         | SWEET VILLA | CHENNAI |  634567 |   30 | MARKETTING | RAHAN   |
+|  200 | SHYJA   |  50000 |   30 |   NULL | 2020-02-01 | SENIOR MANAGER | KRISHNA     | MUMBAI  |  652021 |   30 | MARKETTING | RAHAN   |
+|  141 | DIVYA   |   4500 |   40 |    161 | 1945-03-14 | POEN           | AISWARYAM   | KOCHI   |  670265 |   40 | PRODUCTION | RAJEEV  |
+| NULL | NULL    |   NULL | NULL |   NULL | NULL       | NULL           | NULL        | NULL    |    NULL |   50 | TRANSPORT  | NANDINI |
++------+---------+--------+------+--------+------------+----------------+-------------+---------+---------+------+------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> 

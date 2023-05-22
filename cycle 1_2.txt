@@ -1,0 +1,499 @@
+
+mysql> CREATE DATABASE DATA;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> USE DATA;
+Database changed
+mysql> CREATE TABLE Department(DNO INT(10),DNAME VARCHAR(20) NOT NULL,D_HOD VARCHAR(25),PRIMARY KEY(DNO));
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> DESC Department;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| DNO   | int(10)     | NO   | PRI | NULL    |       |
+| DNAME | varchar(20) | NO   |     | NULL    |       |
+| D_HOD | varchar(25) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO Department VALUES(10,'SALES','SUMESH'),(20,'ACCOUNTING','HARI'),(30,'MARKETTING','RAMESH'),(40,'PRODUCTION','RAJEEV');
+Query OK, 4 rows affected (0.05 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Department ;
++-----+------------+--------+
+| DNO | DNAME      | D_HOD  |
++-----+------------+--------+
+|  10 | SALES      | SUMESH |
+|  20 | ACCOUNTING | HARI   |
+|  30 | MARKETTING | RAMESH |
+|  40 | PRODUCTION | RAJEEV |
++-----+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Employee(ENO INT(10) PRIMARY KEY,ENAME VARCHAR(20) NOT NULL,SALARY INT(15) NOT NULL,DNO INT(10),MNGRNO INT(10),DOJ DATE,JOB VARCHAR(25),ADDRESS VARCHAR(30),CITY VARCHAR(25),PINCODE INT(6),CHECK  (CITY='KOCHI'||'MUMBAI'||'CHENNAI'),FOREIGN KEY(DNO) REFERENCES Department(DNO));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> DESC Employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| ENO     | int(10)     | NO   | PRI | NULL    |       |
+| ENAME   | varchar(20) | NO   |     | NULL    |       |
+| SALARY  | int(15)     | NO   |     | NULL    |       |
+| DNO     | int(10)     | YES  | MUL | NULL    |       |
+| MNGRNO  | int(10)     | YES  |     | NULL    |       |
+| DOJ     | date        | YES  |     | NULL    |       |
+| JOB     | varchar(25) | YES  |     | NULL    |       |
+| ADDRESS | varchar(30) | YES  |     | NULL    |       |
+| CITY    | varchar(25) | YES  |     | NULL    |       |
+| PINCODE | int(6)      | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> INSERT INTO Employee VALUES(111,'SONU',10000,10,23,'1999-02-12','CLERK','SREE KRISHNA','KOCHI',670661),(121,'JUNE',7000,20,24,'2000-05-06','WORKER','SIVA SAI','CHENNAI',670101),(131,'RAHAN',12000,30,25,'1997-04-21','SUPERVISOR','VRINDHAVAN','MUMBAI',563631),(141,'DIVYA',4500,40,26,'1945-03-14','POEN','AISWARYAM','KOCHI',670265),(151,'AMMU',30000,10,27,'2007-08-15','CLERK','BLUE ICE','CHENNAI',670156),(161,'SAYU',1100,10,28,'1986-01-11','SENIOR CLERK','BHAVANS','KOCHI',670201),(171,'SAMMU',2130,20,28,'1992-07-20','MANAGER','SAHIRA','MUMBAI',560121),(181,'MEGHA',15000,30,29,'2016-05-30','WORKER','SWEET VILLA','CHENNAI',634567),(191,'PREETHI',14005,10,31,'1963-04-06','CLERK','GREEN HOUSE','KOCHI',658621),(200,'SHYJA',50000,30,32,'2020-02-20','SUPERVISOR','KRISHNA','MUMBAI',652021);
+Query OK, 10 rows affected (0.13 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Employee;
++-----+---------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB          | ADDRESS      | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| 111 | SONU    |  10000 |   10 |     23 | 1999-02-12 | CLERK        | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE    |   7000 |   20 |     24 | 2000-05-06 | WORKER       | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN   |  12000 |   30 |     25 | 1997-04-21 | SUPERVISOR   | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA   |   4500 |   40 |     26 | 1945-03-14 | POEN         | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU    |  30000 |   10 |     27 | 2007-08-15 | CLERK        | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU    |   1100 |   10 |     28 | 1986-01-11 | SENIOR CLERK | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU   |   2130 |   20 |     28 | 1992-07-20 | MANAGER      | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA   |  15000 |   30 |     29 | 2016-05-30 | WORKER       | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI |  14005 |   10 |     31 | 1963-04-06 | CLERK        | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA   |  50000 |   30 |     32 | 2020-02-20 | SUPERVISOR   | KRISHNA      | MUMBAI  |  652021 |
++-----+---------+--------+------+--------+------------+--------------+--------------+---------+---------+
+10 rows in set (0.00 sec)
+
+mysql> select * from Employee WHERE DOJ>'1998-01-01' AND DNO=10;
++-----+-------+--------+------+--------+------------+-------+--------------+---------+---------+
+| ENO | ENAME | SALARY | DNO  | MNGRNO | DOJ        | JOB   | ADDRESS      | CITY    | PINCODE |
++-----+-------+--------+------+--------+------------+-------+--------------+---------+---------+
+| 111 | SONU  |  10000 |   10 |     23 | 1999-02-12 | CLERK | SREE KRISHNA | KOCHI   |  670661 |
+| 151 | AMMU  |  30000 |   10 |     27 | 2007-08-15 | CLERK | BLUE ICE     | CHENNAI |  670156 |
++-----+-------+--------+------+--------+------------+-------+--------------+---------+---------+
+2 rows in set (0.02 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=121;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from Employee ;
++-----+---------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB          | ADDRESS      | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| 111 | SONU    |  10000 |   10 |     23 | 1999-02-12 | CLERK        | SREE KRISHNA | KOCHI   |  670661 |
+| 131 | RAHAN   |  12000 |   30 |     25 | 1997-04-21 | SUPERVISOR   | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA   |   4500 |   40 |     26 | 1945-03-14 | POEN         | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU    |  30000 |   10 |     27 | 2007-08-15 | CLERK        | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU    |   1100 |   10 |     28 | 1986-01-11 | SENIOR CLERK | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU   |   2130 |   20 |     28 | 1992-07-20 | MANAGER      | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA   |  15000 |   30 |     29 | 2016-05-30 | WORKER       | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI |  14005 |   10 |     31 | 1963-04-06 | CLERK        | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA   |  50000 |   30 |     32 | 2020-02-20 | SUPERVISOR   | KRISHNA      | MUMBAI  |  652021 |
++-----+---------+--------+------+--------+------------+--------------+--------------+---------+---------+
+9 rows in set (0.00 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=131;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=141;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=151;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=161;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=171;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=181;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=191;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> DELETE FROM Employee WHERE ENO=200;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> DESC Employee;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| ENO     | int(10)     | NO   | PRI | NULL    |       |
+| ENAME   | varchar(20) | NO   |     | NULL    |       |
+| SALARY  | int(15)     | NO   |     | NULL    |       |
+| DNO     | int(10)     | YES  | MUL | NULL    |       |
+| MNGRNO  | int(10)     | YES  |     | NULL    |       |
+| DOJ     | date        | YES  |     | NULL    |       |
+| JOB     | varchar(25) | YES  |     | NULL    |       |
+| ADDRESS | varchar(30) | YES  |     | NULL    |       |
+| CITY    | varchar(25) | YES  |     | NULL    |       |
+| PINCODE | int(6)      | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee;
++-----+-------+--------+------+--------+------------+-------+--------------+-------+---------+
+| ENO | ENAME | SALARY | DNO  | MNGRNO | DOJ        | JOB   | ADDRESS      | CITY  | PINCODE |
++-----+-------+--------+------+--------+------------+-------+--------------+-------+---------+
+| 111 | SONU  |  10000 |   10 |     23 | 1999-02-12 | CLERK | SREE KRISHNA | KOCHI |  670661 |
++-----+-------+--------+------+--------+------------+-------+--------------+-------+---------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO Employee VALUES(121,'JUNE',7000,20,23,'2000-05-06','WORKER','SIVA SAI','CHENNAI',670101),(131,'RAHAN',12000,30,23,'1997-04-21','SUPERVISOR','VRINDHAVAN','MUMBAI',563631),(141,'DIVYA',4500,40,24,'1945-03-14','POEN','AISWARYAM','KOCHI',670265),(151,'AMMU',30000,10,23,'2007-08-15','CLERK','BLUE ICE','CHENNAI',670156),(161,'SAYU',1100,10,24,'2001-02-12','CLERK','BHAVANS','KOCHI',670201),(171,'SAMMU',2130,20,24,'1992-07-20','MANAGER','SAHIRA','MUMBAI',560121),(181,'MEGHA',15000,30,24,'2016-05-30','WORKER','SWEET VILLA','CHENNAI',634567),(191,'PREETHI',14005,10,24,'1963-04-06','CLERK','GREEN HOUSE','KOCHI',658621),(200,'SHYJA',50000,30,NULL,'2020-02-01','SUPERVISOR','KRISHNA','MUMBAI',652021);
+Query OK, 9 rows affected (0.04 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Employee;
++-----+---------+--------+------+--------+------------+------------+--------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB        | ADDRESS      | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+------------+--------------+---------+---------+
+| 111 | SONU    |  10000 |   10 |     23 | 1999-02-12 | CLERK      | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE    |   7000 |   20 |     23 | 2000-05-06 | WORKER     | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN   |  12000 |   30 |     23 | 1997-04-21 | SUPERVISOR | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA   |   4500 |   40 |     24 | 1945-03-14 | POEN       | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU    |  30000 |   10 |     23 | 2007-08-15 | CLERK      | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU    |   1100 |   10 |     24 | 2001-02-12 | CLERK      | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU   |   2130 |   20 |     24 | 1992-07-20 | MANAGER    | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA   |  15000 |   30 |     24 | 2016-05-30 | WORKER     | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI |  14005 |   10 |     24 | 1963-04-06 | CLERK      | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA   |  50000 |   30 |   NULL | 2020-02-01 | SUPERVISOR | KRISHNA      | MUMBAI  |  652021 |
++-----+---------+--------+------+--------+------------+------------+--------------+---------+---------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee WHERE DOJ>'1998-01-01' AND DNO=10;
++-----+-------+--------+------+--------+------------+-------+--------------+---------+---------+
+| ENO | ENAME | SALARY | DNO  | MNGRNO | DOJ        | JOB   | ADDRESS      | CITY    | PINCODE |
++-----+-------+--------+------+--------+------------+-------+--------------+---------+---------+
+| 111 | SONU  |  10000 |   10 |     23 | 1999-02-12 | CLERK | SREE KRISHNA | KOCHI   |  670661 |
+| 151 | AMMU  |  30000 |   10 |     23 | 2007-08-15 | CLERK | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU  |   1100 |   10 |     24 | 2001-02-12 | CLERK | BHAVANS      | KOCHI   |  670201 |
++-----+-------+--------+------+--------+------------+-------+--------------+---------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee WHERE DNO!=30;
++-----+---------+--------+------+--------+------------+---------+--------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB     | ADDRESS      | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+---------+--------------+---------+---------+
+| 111 | SONU    |  10000 |   10 |     23 | 1999-02-12 | CLERK   | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE    |   7000 |   20 |     23 | 2000-05-06 | WORKER  | SIVA SAI     | CHENNAI |  670101 |
+| 141 | DIVYA   |   4500 |   40 |     24 | 1945-03-14 | POEN    | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU    |  30000 |   10 |     23 | 2007-08-15 | CLERK   | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU    |   1100 |   10 |     24 | 2001-02-12 | CLERK   | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU   |   2130 |   20 |     24 | 1992-07-20 | MANAGER | SAHIRA       | MUMBAI  |  560121 |
+| 191 | PREETHI |  14005 |   10 |     24 | 1963-04-06 | CLERK   | GREEN HOUSE  | KOCHI   |  658621 |
++-----+---------+--------+------+--------+------------+---------+--------------+---------+---------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Employee WHERE DNO=(SELECT DNO FROM Department WHERE DNAME='SALES');
++-----+---------+--------+------+--------+------------+-------+--------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB   | ADDRESS      | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+-------+--------------+---------+---------+
+| 111 | SONU    |  10000 |   10 |     23 | 1999-02-12 | CLERK | SREE KRISHNA | KOCHI   |  670661 |
+| 151 | AMMU    |  30000 |   10 |     23 | 2007-08-15 | CLERK | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU    |   1100 |   10 |     24 | 2001-02-12 | CLERK | BHAVANS      | KOCHI   |  670201 |
+| 191 | PREETHI |  14005 |   10 |     24 | 1963-04-06 | CLERK | GREEN HOUSE  | KOCHI   |  658621 |
++-----+---------+--------+------+--------+------------+-------+--------------+---------+---------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT
+    -> * FROM Employee WHERE MNGRNO!=('NULL');
++-----+---------+--------+------+--------+------------+------------+--------------+---------+---------+
+| ENO | ENAME   | SALARY | DNO  | MNGRNO | DOJ        | JOB        | ADDRESS      | CITY    | PINCODE |
++-----+---------+--------+------+--------+------------+------------+--------------+---------+---------+
+| 111 | SONU    |  10000 |   10 |     23 | 1999-02-12 | CLERK      | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE    |   7000 |   20 |     23 | 2000-05-06 | WORKER     | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN   |  12000 |   30 |     23 | 1997-04-21 | SUPERVISOR | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA   |   4500 |   40 |     24 | 1945-03-14 | POEN       | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU    |  30000 |   10 |     23 | 2007-08-15 | CLERK      | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU    |   1100 |   10 |     24 | 2001-02-12 | CLERK      | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU   |   2130 |   20 |     24 | 1992-07-20 | MANAGER    | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA   |  15000 |   30 |     24 | 2016-05-30 | WORKER     | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI |  14005 |   10 |     24 | 1963-04-06 | CLERK      | GREEN HOUSE  | KOCHI   |  658621 |
++-----+---------+--------+------+--------+------------+------------+--------------+---------+---------+
+9 rows in set, 1 warning (0.00 sec)
+
+mysql> SELECT  * FROM Employee WHERE MNGRNO IS NULL;
++-----+-------+--------+------+--------+------------+------------+---------+--------+---------+
+| ENO | ENAME | SALARY | DNO  | MNGRNO | DOJ        | JOB        | ADDRESS | CITY   | PINCODE |
++-----+-------+--------+------+--------+------------+------------+---------+--------+---------+
+| 200 | SHYJA |  50000 |   30 |   NULL | 2020-02-01 | SUPERVISOR | KRISHNA | MUMBAI |  652021 |
++-----+-------+--------+------+--------+------------+------------+---------+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM Employee WHERE ENAME LIKE 'J_N%';
++-----+-------+--------+------+--------+------------+--------+----------+---------+---------+
+| ENO | ENAME | SALARY | DNO  | MNGRNO | DOJ        | JOB    | ADDRESS  | CITY    | PINCODE |
++-----+-------+--------+------+--------+------------+--------+----------+---------+---------+
+| 121 | JUNE  |   7000 |   20 |     23 | 2000-05-06 | WORKER | SIVA SAI | CHENNAI |  670101 |
++-----+-------+--------+------+--------+------------+--------+----------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM Employee WHERE DOJ BETWEEN'1999-12-31' AND '2001-01-01';
++-----+-------+--------+------+--------+------------+--------+----------+---------+---------+
+| ENO | ENAME | SALARY | DNO  | MNGRNO | DOJ        | JOB    | ADDRESS  | CITY    | PINCODE |
++-----+-------+--------+------+--------+------------+--------+----------+---------+---------+
+| 121 | JUNE  |   7000 |   20 |     23 | 2000-05-06 | WORKER | SIVA SAI | CHENNAI |  670101 |
++-----+-------+--------+------+--------+------------+--------+----------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT CONCAT(' EVERY YEAR  ',ENAME,'   EARNS   ',SALARY*12)' ANNUAL INCOME ' FROM Employee;
++---------------------------------------+
+| ANNUAL INCOME                         |
++---------------------------------------+
+|  EVERY YEAR  SONU   EARNS   120000    |
+|  EVERY YEAR  JUNE   EARNS   84000     |
+|  EVERY YEAR  RAHAN   EARNS   144000   |
+|  EVERY YEAR  DIVYA   EARNS   54000    |
+|  EVERY YEAR  AMMU   EARNS   360000    |
+|  EVERY YEAR  SAYU   EARNS   13200     |
+|  EVERY YEAR  SAMMU   EARNS   25560    |
+|  EVERY YEAR  MEGHA   EARNS   180000   |
+|  EVERY YEAR  PREETHI   EARNS   168060 |
+|  EVERY YEAR  SHYJA   EARNS   600000   |
++---------------------------------------+
+10 rows in set, 1 warning (0.00 sec)
+
+mysql> SELECT COUNT(*) AS NUMBER_OF_EMPLOYEE FROM Employee;
++--------------------+
+| NUMBER_OF_EMPLOYEE |
++--------------------+
+|                 10 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MIN(SALARY) 'MINIMUM SALARY',JOB FROM Employee GROUP BY JOB;
++----------------+------------+
+| MINIMUM SALARY | JOB        |
++----------------+------------+
+|           1100 | CLERK      |
+|           2130 | MANAGER    |
+|           4500 | POEN       |
+|          12000 | SUPERVISOR |
+|           7000 | WORKER     |
++----------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT MIN(SALARY) 'MINIMUM SALARY',JOB,DNO FROM Employee GROUP BY JOB,DNO HAVING MIN(SALARY)>7000;
++----------------+------------+------+
+| MINIMUM SALARY | JOB        | DNO  |
++----------------+------------+------+
+|          12000 | SUPERVISOR |   30 |
+|          15000 | WORKER     |   30 |
++----------------+------------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT MIN(SALARY) 'MINIMUM SALARY',JOB,DNO FROM Employee GROUP BY JOB,DNO,ENAME  HAVING MIN(SALARY)>7000;
++----------------+------------+------+
+| MINIMUM SALARY | JOB        | DNO  |
++----------------+------------+------+
+|          30000 | CLERK      |   10 |
+|          14005 | CLERK      |   10 |
+|          10000 | CLERK      |   10 |
+|          12000 | SUPERVISOR |   30 |
+|          50000 | SUPERVISOR |   30 |
+|          15000 | WORKER     |   30 |
++----------------+------------+------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO Employee VALUES(201,'VYSHNA',20000,10,23,'1992-02-13','MANAGER','GURUVAYOOR','KOCHI',650231),(202,'JAYASREE',13250,20,24,'2003-12-19','MANAGER','DURGA','MUMBAI',560232);
+Query OK, 2 rows affected (0.04 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Employee;
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB        | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+| 111 | SONU     |  10000 |   10 |     23 | 1999-02-12 | CLERK      | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE     |   7000 |   20 |     23 | 2000-05-06 | WORKER     | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN    |  12000 |   30 |     23 | 1997-04-21 | SUPERVISOR | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA    |   4500 |   40 |     24 | 1945-03-14 | POEN       | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU     |  30000 |   10 |     23 | 2007-08-15 | CLERK      | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |   1100 |   10 |     24 | 2001-02-12 | CLERK      | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU    |   2130 |   20 |     24 | 1992-07-20 | MANAGER    | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA    |  15000 |   30 |     24 | 2016-05-30 | WORKER     | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI  |  14005 |   10 |     24 | 1963-04-06 | CLERK      | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA    |  50000 |   30 |   NULL | 2020-02-01 | SUPERVISOR | KRISHNA      | MUMBAI  |  652021 |
+| 201 | VYSHNA   |  20000 |   10 |     23 | 1992-02-13 | MANAGER    | GURUVAYOOR   | KOCHI   |  650231 |
+| 202 | JAYASREE |  13250 |   20 |     24 | 2003-12-19 | MANAGER    | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT ENAME,DATE_FORMAT(DOJ,'%d/%m/%y') AS DATE_OF_JOINING FROM Employee;
++----------+-----------------+
+| ENAME    | DATE_OF_JOINING |
++----------+-----------------+
+| SONU     | 12/02/99        |
+| JUNE     | 06/05/00        |
+| RAHAN    | 21/04/97        |
+| DIVYA    | 14/03/45        |
+| AMMU     | 15/08/07        |
+| SAYU     | 12/02/01        |
+| SAMMU    | 20/07/92        |
+| MEGHA    | 30/05/16        |
+| PREETHI  | 06/04/63        |
+| SHYJA    | 01/02/20        |
+| VYSHNA   | 13/02/92        |
+| JAYASREE | 19/12/03        |
++----------+-----------------+
+12 rows in set (0.00 sec)
+
+mysql> UPDATE Employee SET SALARY=1.2*SALARY;
+Query OK, 12 rows affected (0.04 sec)
+Rows matched: 12  Changed: 12  Warnings: 0
+
+mysql> SELECT * FROM Employee;                                                                                                                                          +-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB        | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+| 111 | SONU     |  12000 |   10 |     23 | 1999-02-12 | CLERK      | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE     |   8400 |   20 |     23 | 2000-05-06 | WORKER     | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN    |  14400 |   30 |     23 | 1997-04-21 | SUPERVISOR | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA    |   5400 |   40 |     24 | 1945-03-14 | POEN       | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU     |  36000 |   10 |     23 | 2007-08-15 | CLERK      | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |   1320 |   10 |     24 | 2001-02-12 | CLERK      | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU    |   2556 |   20 |     24 | 1992-07-20 | MANAGER    | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA    |  18000 |   30 |     24 | 2016-05-30 | WORKER     | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI  |  16806 |   10 |     24 | 1963-04-06 | CLERK      | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA    |  60000 |   30 |   NULL | 2020-02-01 | SUPERVISOR | KRISHNA      | MUMBAI  |  652021 |
+| 201 | VYSHNA   |  24000 |   10 |     23 | 1992-02-13 | MANAGER    | GURUVAYOOR   | KOCHI   |  650231 |
+| 202 | JAYASREE |  15900 |   20 |     24 | 2003-12-19 | MANAGER    | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+12 rows in set (0.00 sec)
+
+mysql> UPDATE Employee SET SALARY=10000 WHERE SALARY<7000;
+Query OK, 3 rows affected (0.04 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> SELECT * FROM Employee;
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB        | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+| 111 | SONU     |  12000 |   10 |     23 | 1999-02-12 | CLERK      | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE     |   8400 |   20 |     23 | 2000-05-06 | WORKER     | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN    |  14400 |   30 |     23 | 1997-04-21 | SUPERVISOR | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA    |  10000 |   40 |     24 | 1945-03-14 | POEN       | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU     |  36000 |   10 |     23 | 2007-08-15 | CLERK      | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |  10000 |   10 |     24 | 2001-02-12 | CLERK      | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU    |  10000 |   20 |     24 | 1992-07-20 | MANAGER    | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA    |  18000 |   30 |     24 | 2016-05-30 | WORKER     | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI  |  16806 |   10 |     24 | 1963-04-06 | CLERK      | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA    |  60000 |   30 |   NULL | 2020-02-01 | SUPERVISOR | KRISHNA      | MUMBAI  |  652021 |
+| 201 | VYSHNA   |  24000 |   10 |     23 | 1992-02-13 | MANAGER    | GURUVAYOOR   | KOCHI   |  650231 |
+| 202 | JAYASREE |  15900 |   20 |     24 | 2003-12-19 | MANAGER    | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+------------+--------------+---------+---------+
+12 rows in set (0.00 sec)
+
+mysql> UPDATE Employee SET JOB='SENIOR CLERK' WHERE JOB='CLERK' AND SALARY=10000;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Employee;
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB          | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| 111 | SONU     |  12000 |   10 |     23 | 1999-02-12 | CLERK        | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE     |   8400 |   20 |     23 | 2000-05-06 | WORKER       | SIVA SAI     | CHENNAI |  670101 |
+| 131 | RAHAN    |  14400 |   30 |     23 | 1997-04-21 | SUPERVISOR   | VRINDHAVAN   | MUMBAI  |  563631 |
+| 141 | DIVYA    |  10000 |   40 |     24 | 1945-03-14 | POEN         | AISWARYAM    | KOCHI   |  670265 |
+| 151 | AMMU     |  36000 |   10 |     23 | 2007-08-15 | CLERK        | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |  10000 |   10 |     24 | 2001-02-12 | SENIOR CLERK | BHAVANS      | KOCHI   |  670201 |
+| 171 | SAMMU    |  10000 |   20 |     24 | 1992-07-20 | MANAGER      | SAHIRA       | MUMBAI  |  560121 |
+| 181 | MEGHA    |  18000 |   30 |     24 | 2016-05-30 | WORKER       | SWEET VILLA  | CHENNAI |  634567 |
+| 191 | PREETHI  |  16806 |   10 |     24 | 1963-04-06 | CLERK        | GREEN HOUSE  | KOCHI   |  658621 |
+| 200 | SHYJA    |  60000 |   30 |   NULL | 2020-02-01 | SUPERVISOR   | KRISHNA      | MUMBAI  |  652021 |
+| 201 | VYSHNA   |  24000 |   10 |     23 | 1992-02-13 | MANAGER      | GURUVAYOOR   | KOCHI   |  650231 |
+| 202 | JAYASREE |  15900 |   20 |     24 | 2003-12-19 | MANAGER      | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT MIN(SALARY) AS MINIMUM_SALARY,JOB,DNO FROM Employee GROUP BY JOB,DNO HAVING JOB='MANAGER';
++----------------+---------+------+
+| MINIMUM_SALARY | JOB     | DNO  |
++----------------+---------+------+
+|          24000 | MANAGER |   10 |
+|          10000 | MANAGER |   20 |
++----------------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT ENAME AS CLERK_NAME,DNO FROM Employee WHERE JOB='CLERK';
++------------+------+
+| CLERK_NAME | DNO  |
++------------+------+
+| SONU       |   10 |
+| AMMU       |   10 |
+| PREETHI    |   10 |
++------------+------+
+3 rows in set (0.00 sec)
+
+mysql> DELETE FROM Employee WHERE YEAR(DOJ)<1998;
+Query OK, 5 rows affected (0.07 sec)
+
+mysql> SELECT * FROM Employee;
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB          | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| 111 | SONU     |  12000 |   10 |     23 | 1999-02-12 | CLERK        | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE     |   8400 |   20 |     23 | 2000-05-06 | WORKER       | SIVA SAI     | CHENNAI |  670101 |
+| 151 | AMMU     |  36000 |   10 |     23 | 2007-08-15 | CLERK        | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |  10000 |   10 |     24 | 2001-02-12 | SENIOR CLERK | BHAVANS      | KOCHI   |  670201 |
+| 181 | MEGHA    |  18000 |   30 |     24 | 2016-05-30 | WORKER       | SWEET VILLA  | CHENNAI |  634567 |
+| 200 | SHYJA    |  60000 |   30 |   NULL | 2020-02-01 | SUPERVISOR   | KRISHNA      | MUMBAI  |  652021 |
+| 202 | JAYASREE |  15900 |   20 |     24 | 2003-12-19 | MANAGER      | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT ENAME AS CLERK_NAME,DNAME  FROM Employee,Department WHERE JOB='CLERK' AND Employee.DNO=Department.DNO;
++------------+-------+
+| CLERK_NAME | DNAME |
++------------+-------+
+| SONU       | SALES |
+| AMMU       | SALES |
++------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> UPDATE Employee SET DNO=10 WHERE ENO=121;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Employee;
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB          | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| 111 | SONU     |  12000 |   10 |     23 | 1999-02-12 | CLERK        | SREE KRISHNA | KOCHI   |  670661 |
+| 121 | JUNE     |   8400 |   10 |     23 | 2000-05-06 | WORKER       | SIVA SAI     | CHENNAI |  670101 |
+| 151 | AMMU     |  36000 |   10 |     23 | 2007-08-15 | CLERK        | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |  10000 |   10 |     24 | 2001-02-12 | SENIOR CLERK | BHAVANS      | KOCHI   |  670201 |
+| 181 | MEGHA    |  18000 |   30 |     24 | 2016-05-30 | WORKER       | SWEET VILLA  | CHENNAI |  634567 |
+| 200 | SHYJA    |  60000 |   30 |   NULL | 2020-02-01 | SUPERVISOR   | KRISHNA      | MUMBAI  |  652021 |
+| 202 | JAYASREE |  15900 |   20 |     24 | 2003-12-19 | MANAGER      | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+7 rows in set (0.00 sec)
+
+mysql> DELETE FROM Employee WHERE JOB='WORKER' AND DNO=10;
+Query OK, 1 row affected (0.05 sec)
+
+mysql> SELECT * FROM Employee;
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| ENO | ENAME    | SALARY | DNO  | MNGRNO | DOJ        | JOB          | ADDRESS      | CITY    | PINCODE |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+| 111 | SONU     |  12000 |   10 |     23 | 1999-02-12 | CLERK        | SREE KRISHNA | KOCHI   |  670661 |
+| 151 | AMMU     |  36000 |   10 |     23 | 2007-08-15 | CLERK        | BLUE ICE     | CHENNAI |  670156 |
+| 161 | SAYU     |  10000 |   10 |     24 | 2001-02-12 | SENIOR CLERK | BHAVANS      | KOCHI   |  670201 |
+| 181 | MEGHA    |  18000 |   30 |     24 | 2016-05-30 | WORKER       | SWEET VILLA  | CHENNAI |  634567 |
+| 200 | SHYJA    |  60000 |   30 |   NULL | 2020-02-01 | SUPERVISOR   | KRISHNA      | MUMBAI  |  652021 |
+| 202 | JAYASREE |  15900 |   20 |     24 | 2003-12-19 | MANAGER      | DURGA        | MUMBAI  |  560232 |
++-----+----------+--------+------+--------+------------+--------------+--------------+---------+---------+
+6 rows in set (0.00 sec)
+
+mysql>
+

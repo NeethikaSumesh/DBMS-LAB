@@ -1,0 +1,143 @@
+mysql> CREATE DATABASE University;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> USE University;
+Database changed
+
+mysql> CREATE TABLE STUDENT(Name VARCHAR(25),RollNo INT(3) primary key,Age INT(3),Branch VARCHAR(20));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> DESC STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Name   | varchar(25) | YES  |     | NULL    |       |
+| RollNo | int(3)      | NO   | PRI | NULL    |       |
+| Age    | int(3)      | YES  |     | NULL    |       |
+| Branch | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> INSERT INTO STUDENT(Name,RollNo,Age,Branch)VALUES('Neethika',70,20,'CS'),('Ammu',34,19,'MECH'),('Sayoojya',84,21,'ECE');
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENT;
++----------+--------+------+--------+
+| Name     | RollNo | Age  | Branch |
++----------+--------+------+--------+
+| Ammu     |     34 |   19 | MECH   |
+| Neethika |     70 |   20 | CS     |
+| Sayoojya |     84 |   21 | ECE    |
++----------+--------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENT ADD TOTAL_MARKS INT(3) AFTER Branch;
+Query OK, 0 rows affected (0.63 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENT;
++----------+--------+------+--------+-------------+
+| Name     | RollNo | Age  | Branch | TOTAL_MARKS |
++----------+--------+------+--------+-------------+
+| Ammu     |     34 |   19 | MECH   |        NULL |
+| Neethika |     70 |   20 | CS     |        NULL |
+| Sayoojya |     84 |   21 | ECE    |        NULL |
++----------+--------+------+--------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE STUDENT SET TOTAL_MARKS=16 WHERE Name='Ammu';
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE STUDENT SET TOTAL_MARKS=10 WHERE Name='Neethika';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE STUDENT SET TOTAL_MARKS=22 WHERE Name='Sayoojya';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM STUDENT;
++----------+--------+------+--------+-------------+
+| Name     | RollNo | Age  | Branch | TOTAL_MARKS |
++----------+--------+------+--------+-------------+
+| Ammu     |     34 |   19 | MECH   |          16 |
+| Neethika |     70 |   20 | CS     |          10 |
+| Sayoojya |     84 |   21 | ECE    |          22 |
++----------+--------+------+--------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENT CHANGE RollNO STUDENT_RollNo INT(3);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE STUDENT CHANGE Name STUDENT_Name VARCHAR(25);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENT;
++--------------+----------------+------+--------+-------------+
+| STUDENT_Name | STUDENT_RollNo | Age  | Branch | TOTAL_MARKS |
++--------------+----------------+------+--------+-------------+
+| Ammu         |             34 |   19 | MECH   |          16 |
+| Neethika     |             70 |   20 | CS     |          10 |
+| Sayoojya     |             84 |   21 | ECE    |          22 |
++--------------+----------------+------+--------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT MAX(TOTAL_MARKS) FROM STUDENT;
++------------------+
+| MAX(TOTAL_MARKS) |
++------------------+
+|               22 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MIN(TOTAL_MARKS) FROM STUDENT;
++------------------+
+| MIN(TOTAL_MARKS) |
++------------------+
+|               10 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(TOTAL_MARKS) FROM STUDENT;
++------------------+
+| AVG(TOTAL_MARKS) |
++------------------+
+|          16.0000 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENT WHERE Branch='CS';
++--------------+----------------+------+--------+-------------+
+| STUDENT_Name | STUDENT_RollNo | Age  | Branch | TOTAL_MARKS |
++--------------+----------------+------+--------+-------------+
+| Neethika     |             70 |   20 | CS     |          10 |
++--------------+----------------+------+--------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(TOTAL_MARKS) FROM STUDENT;
++------------------+
+| MAX(TOTAL_MARKS) |
++------------------+
+|               22 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENT WHERE TOTAL_MARKS=(SELECT MAX(TOTAL_MARKS) FROM STUDENT);
++--------------+----------------+------+--------+-------------+
+| STUDENT_Name | STUDENT_RollNo | Age  | Branch | TOTAL_MARKS |
++--------------+----------------+------+--------+-------------+
+| Sayoojya     |             84 |   21 | ECE    |          22 |
++--------------+----------------+------+--------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(TOTAL_MARKS)'Maximum',MIN(TOTAL_MARKS)'Minimum',AVG(TOTAL_MARKS)'Average' FROM STUDENT;
++---------+---------+---------+
+| Maximum | Minimum | Average |
++---------+---------+---------+
+|      22 |      10 | 16.0000 |
++---------+---------+---------+
+1 row in set (0.00 sec)
