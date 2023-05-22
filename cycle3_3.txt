@@ -1,0 +1,53 @@
+// TO CREATE A TRIGGER TO UPDATE THE VALUE OF ACCOUNT BALANCE AS PER THE TRANSACTION
+
+CREATE DATABASE Transaction;
+USE Transaction;
+
+CREATE TABLE BANK(Acc_NO INT(10),Acc_Name VARCHAR(25),Balance INT(10));
+CREATE TABLE ACCOUNT(Acc_No INT (10),Amount INT(10),Acc_Type VARCHAR(20));
+
+INSERT INTO BANK VALUES(121800,"Neethika",5000),(121650,"Anjali",10000),(121700,"Nandana",6800);
+SELECT * FROM BANK;
++--------+----------+---------+
+| Acc_NO | Acc_Name | Balance |
++--------+----------+---------+
+| 121800 | Neethika |    5000 |
+| 121650 | Anjali   |   10000 |
+| 121700 | Nandana  |    6800 |
++--------+----------+---------+
+
+DELIMITER #
+CREATE TRIGGER Trans_Trigger AFTER INSERT ON ACCOUNT FOR EACH ROW 
+BEGIN
+IF(NEW.Acc_Type="CREDIT") THEN
+UPDATE BANK SET Balance=Balance+NEW.Amount WHERE BANK.Acc_No=NEW.Acc_No;
+END IF;
+IF(NEW.Acc_Type="DEBIT") THEN
+UPDATE BANK SET Balance=Balance-NEW.Amount WHERE BANK.Acc_No=NEW.Acc_No;
+END IF;
+END #
+
+DELIMITER ;
+INSERT INTO ACCOUNT VALUES(121800,5000,"CREDIT");
+
+SELECT * FROM BANK;
++--------+----------+---------+
+| Acc_NO | Acc_Name | Balance |
++--------+----------+---------+
+| 121800 | Neethika |   10000 |
+| 121650 | Anjali   |   10000 |
+| 121700 | Nandana  |    6800 |
++--------+----------+---------+
+
+INSERT INTO ACCOUNT VALUES(121650,5500,"DEBIT");
+
+SELECT * FROM BANK;
++--------+----------+---------+
+| Acc_NO | Acc_Name | Balance |
++--------+----------+---------+
+| 121800 | Neethika |   10000 |
+| 121650 | Anjali   |    4500 |
+| 121700 | Nandana  |    6800 |
++--------+----------+---------+
+
+
