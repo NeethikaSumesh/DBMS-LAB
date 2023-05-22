@@ -1,0 +1,80 @@
+//aggregate functions
+
+mysql> create database university;
+mysql> use university;
+
+mysql> create table instructor(id int,name varchar(10),salary int,dept_name varchar(15));
+
+mysql> insert into instructor(id,name,salary,dept_name) values(111,'ABC',65000,'COMPUTER'),(112,'PQR',90000,'MUSIC'),(113,'EFG',70000,'PHYSICS'),(114,'XYZ',50000,'HISTORY'),(115,'LMN',90000,'MUSIC'),(116,'UVW',70000,'PHYSICS'),(117,'STU',55000,'BIOLOGY');
+mysql> select * from instructor;
++------+------+--------+-----------+
+| id   | name | salary | dept_name |
++------+------+--------+-----------+
+|  111 | ABC  |  65000 | COMPUTER  |
+|  112 | PQR  |  90000 | MUSIC     |
+|  113 | EFG  |  70000 | PHYSICS   |
+|  114 | XYZ  |  50000 | HISTORY   |
+|  115 | LMN  |  90000 | MUSIC     |
+|  116 | UVW  |  70000 | PHYSICS   |
+|  117 | STU  |  55000 | BIOLOGY   |
++------+------+--------+-----------+
+
+
+mysql> select min(salary) from instructor;
++-------------+
+| min(salary) |
++-------------+
+|       50000 |
++-------------+
+mysql> select min(salary) as minimum_sal  from instructor;
++-------------+
+| minimum_sal |
++-------------+
+|       50000 |
++-------------+
+
+
+mysql> select max(salary) as maximum_sal from instructor;
++-------------+
+| maximum_sal |
++-------------+
+|       90000 |
++-------------+
+
+mysql> select avg(salary) as average_sal from instructor;
++-------------+
+| average_sal |
++-------------+
+|  70000.0000 |
++-------------+
+
+mysql> select sum(salary) as sum_sal from instructor;
++---------+
+| sum_sal |
++---------+
+|  490000 |
++---------+
+
+mysql> select count(salary) from  instructor;
++---------------+
+| count(salary) |
++---------------+
+|             7 |
++---------------+
+
+mysql> select count(*) from  instructor;
++----------+
+| count(*) |
++----------+
+|        7 |
++----------+
+
+
+mysql> select count(*) as no_records from  instructor;
++------------+
+| no_records |
++------------+
+|          7 |
++------------+
+
+
