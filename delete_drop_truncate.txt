@@ -1,0 +1,132 @@
+**** difference between delete,truncate,drop******
+
+
+mysql> create table studd(roll int primary key, name varchar(10),address varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll    | int         | NO   | PRI | NULL    |       |
+| name    | varchar(10) | YES  |     | NULL    |       |
+| address | varchar(15) | YES  |     | NULL    |       |
+| class   | varchar(15) | YES  |     | NULL    |       |
+| sid     | int         | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into studd;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> desc studd;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll    | int         | NO   | PRI | NULL    |       |
+| name    | varchar(10) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into studd(roll,name,address) values(1,'ABC','pune'),(2,'PQR','Nashik'),(3,'ABC','Nashik');
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from studd;
++------+------+---------+
+| roll | name | address |
++------+------+---------+
+|    1 | ABC  | pune    |
+|    2 | PQR  | Nashik  |
+|    3 | ABC  | Nashik  |
++------+------+---------+
+3 rows in set (0.00 sec)
+
+------to delete a particular row-------
+
+mysql> delete from studd where roll=1;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from studd;
++------+------+---------+
+| roll | name | address |
++------+------+---------+
+|    2 | PQR  | Nashik  |
+|    3 | ABC  | Nashik  |
++------+------+---------+
+
+mysql> delete from studd where name='PQR';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from studd;
++------+------+---------+
+| roll | name | address |
++------+------+---------+
+|    3 | ABC  | Nashik  |
++------+------+---------+
+1 row in set (0.00 sec)
+
+mysql> insert into studd(roll,name,address) values(1,'ABC','pune'),(2,'PQR','Nashik');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from studd;
++------+------+---------+
+| roll | name | address |
++------+------+---------+
+|    1 | ABC  | pune    |
+|    2 | PQR  | Nashik  |
+|    3 | ABC  | Nashik  |
++------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> delete from studd;
+Query OK, 3 rows affected (0.02 sec)
+
+mysql> select * from studd;
+Empty set (0.00 sec)
+
+mysql> desc table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> desc studd;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll    | int         | NO   | PRI | NULL    |       |
+| name    | varchar(10) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> drop table studd;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc studd;
+ERROR 1146 (42S02): Table 'college.studd' doesn't exist
+mysql> create table studd(roll int primary key, name varchar(10),address varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into studd(roll,name,address) values(1,'ABC','pune'),(2,'PQR','Nashik'),(3,'ABC','Nashik');
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from studd;
++------+------+---------+
+| roll | name | address |
++------+------+---------+
+|    1 | ABC  | pune    |
+|    2 | PQR  | Nashik  |
+|    3 | ABC  | Nashik  |
++------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> truncate studd;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from studd;
+Empty set (0.00 sec)
+
+delete from student--------------> whole records is deleted but structure of the table will be there after executing desc studnt;
+drop table studd-----------------> whole table is dropped from database;
+truncate studd-------------------> whole records is deleted but existence of table is there in database
+
